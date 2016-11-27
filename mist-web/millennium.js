@@ -45,8 +45,8 @@ function init() {
 
 var allowAnswer = false;
 
-var millionaireContractABI = [ { "constant": false, "inputs": [], "name": "nextQuestion", "outputs": [], "payable": true, "type": "function" }, { "constant": false, "inputs": [ { "name": "_answer", "type": "string" } ], "name": "answer", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "players", "outputs": [ { "name": "newShare", "type": "bool", "value": false }, { "name": "nextQuestion", "type": "uint256", "value": "0" }, { "name": "waitingNextQuestion", "type": "bool", "value": false }, { "name": "correctCount", "type": "uint256", "value": "0" } ], "payable": false, "type": "function" }, { "inputs": [], "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "p", "type": "address" }, { "indexed": false, "name": "id", "type": "uint256" }, { "indexed": false, "name": "q", "type": "string" }, { "indexed": false, "name": "c", "type": "string" }, { "indexed": false, "name": "a", "type": "string" }, { "indexed": false, "name": "reward", "type": "uint256" } ], "name": "print_question", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "p", "type": "address" }, { "indexed": false, "name": "correctCount", "type": "uint256" }, { "indexed": false, "name": "msg", "type": "string" } ], "name": "print_result", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "print_transfer", "type": "event" } ];
-var millionaireContractAddress = '0xe54985ce432620000F95A0F84F6CD945eA74811b';
+var millionaireContractABI = [ { "constant": false, "inputs": [], "name": "nextQuestion", "outputs": [], "payable": true, "type": "function" }, { "constant": false, "inputs": [ { "name": "_answer", "type": "string" } ], "name": "answer", "outputs": [], "payable": false, "type": "function" }, { "inputs": [], "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "p", "type": "address" }, { "indexed": false, "name": "id", "type": "uint256" }, { "indexed": false, "name": "q", "type": "string" }, { "indexed": false, "name": "c", "type": "string" }, { "indexed": false, "name": "a", "type": "string" }, { "indexed": false, "name": "reward", "type": "uint256" } ], "name": "print_question", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "p", "type": "address" }, { "indexed": false, "name": "correctCount", "type": "uint256" }, { "indexed": false, "name": "msg", "type": "string" } ], "name": "print_result", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "print_transfer", "type": "event" } ];
+var millionaireContractAddress = '0x2563A373f4da44172b38D41a7F0BE89F17962e01';
 
 
 //event print_question(address p, uint id, string q, string c, string a, uint reward);
@@ -71,12 +71,13 @@ function nextQuestion() {
     millionaireContractFunction = millionaireContract.at(millionaireContractAddress);
 
     var printQuestionLog = millionaireContractFunction.print_question();
+
     printQuestionLog.watch(function(error, result){
         //document.getElementById('status').textContent = result.args.s;
         console.log('event', result.args);
 
         var question = result.args.q;
-        var choices = result.args.c.split(',');
+        var choices = result.args.c.split(';');
 
         var reward = web3.fromWei(web3.eth.getBalance(millionaireContractAddress),'ether').toString(10);
         console.log('reward', reward);
@@ -98,7 +99,7 @@ function nextQuestion() {
 
     showLoading(true);
 
-    var result = millionaireContractFunction.nextQuestion();
+    var result = millionaireContractFunction.nextQuestion({value: web3.toWei(1, "ether")});
     console.log('next question api call', result);
 }
 
