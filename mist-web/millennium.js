@@ -35,12 +35,6 @@ function init() {
 
 
     setupUi();
-
-    //greeting();
-
-    //nextQuestion();
-
-    //answer();
 }
 
 var allowAnswer = false;
@@ -57,6 +51,21 @@ function setupUi(){
     document.getElementById('vote2').addEventListener('click', function(){ answer('b'); }, false);
     document.getElementById('vote3').addEventListener('click', function(){ answer('c'); }, false);
     document.getElementById('vote4').addEventListener('click', function(){ answer('d'); }, false);
+
+    showQuestion(false);
+}
+
+function showQuestion(show){
+
+    var visibility = 'hidden';
+    if(show){
+        visibility = 'visible';
+    }
+    document.getElementById('proposal').style.visibility = visibility;
+    document.getElementById('vote1').style.visibility = visibility;
+    document.getElementById('vote2').style.visibility = visibility;
+    document.getElementById('vote3').style.visibility = visibility;
+    document.getElementById('vote4').style.visibility = visibility;
 }
 
 var millionaireContract = web3.eth.contract(millionaireContractABI);
@@ -99,7 +108,9 @@ function nextQuestion() {
 
         document.getElementById('proposal').textContent = question;
         document.getElementById('answer').textContent = 'Next';
+        document.getElementById('status').textContent = '';
 
+        showQuestion(true);
         showLoading(false);
 
         allowAnswer = true;
@@ -107,8 +118,8 @@ function nextQuestion() {
 
     showLoading(true);
 
-    //var result = millionaireContractFunction.nextQuestion({value: web3.toWei(1, "ether")});
-    var result = millionaireContractFunction.nextQuestion();
+    var result = millionaireContractFunction.nextQuestion({value: web3.toWei(1, "ether")});
+    //var result = millionaireContractFunction.nextQuestion();
     console.log('next question api call', result);
 }
 
@@ -133,6 +144,14 @@ function answer(choice) {
 
         showLoading(false);
         document.getElementById('status').textContent = result.args.msg;
+
+        if(result.args.msg == 'Wrong answer.'){
+            document.getElementById('status').textContent = 'Wrong answer!, Click Restart to Begin';
+            document.getElementById('answer').textContent = 'Restart';
+        }else if(result.args.msg == 'Correct answer. Please next question.'){
+            document.getElementById('status').textContent = 'Correct answer!, Click Next to Continue';
+            document.getElementById('answer').textContent = 'Next';
+        }
     })
 
     showLoading(true);

@@ -106,12 +106,14 @@ h2 {
 
 #status {
     position: fixed;
-    bottom: 32px;
+    bottom: 60px;
     left: 0;
     right: 0;
     font-size: 150%;
     opacity: 0.5;
     text-align: center;
+    background-color: #fff00a;
+    color:#000000;
 }
 
 #results {
