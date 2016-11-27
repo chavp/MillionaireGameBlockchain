@@ -19,23 +19,22 @@ contract MillionaireGame{
     
     event print_question(address p, uint id, string q, string c, string a, uint reward);
     event print_result(address p, uint correctCount, string msg);
-    
     event print_transfer(address indexed from, address indexed to, uint256 value);
     
     address owner;
 
     uint questionsCount;
     mapping(uint => Question) questions;
-    mapping(address => Player) public players;
+    mapping(address => Player) players;
 
     function MillionaireGame() payable {
         owner = msg.sender;
 
-        addQuestion(1, "Q-1?", "a, b, c, d, e", "a");
-        addQuestion(2, "Q-2?", "a, b, c, d, e", "b");
-        addQuestion(3, "Q-3?", "a, b, c, d, e", "c");
-        addQuestion(4, "Q-4?", "a, b, c, d, e", "d");
-        addQuestion(5, "Q-5?", "a, b, c, d, e", "e");
+        addQuestion(1, "Q-1?", "a.A Q-1, b.B Q-1, c.C Q-1, d.D Q-1, "a");
+        addQuestion(2, "Q-2?", "a.A Q-2, b.B Q-2, c.C Q-2, d.D Q-2, "b");
+        addQuestion(3, "Q-3?", "a.A Q-3, b.B Q-3, c.C Q-3, d.D Q-3, "c");
+        addQuestion(4, "Q-4?", "a.A Q-4, b.B Q-4, c.C Q-4, d.D Q-4, "d");
+        addQuestion(5, "Q-5?", "a.A Q-5, b.B Q-5, c.C Q-5, d.D Q-5, "a");
     }
 
     function nextQuestion() payable {
