@@ -50,13 +50,13 @@ button#vote2 {
 
 #results #support ,
 button#vote3 {
-    background: green;
+    background: #FF9A00;
     border-bottom-color: darkgreen;
 }
 
 #results #opposition,
 button#vote4 {
-    background: red;
+    background: #00e6ff;
     border-bottom-color: darkred;
 }
 
