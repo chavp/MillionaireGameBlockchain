@@ -51,13 +51,13 @@ button#vote2 {
 #results #support ,
 button#vote3 {
     background: #FF9A00;
-    border-bottom-color: darkgreen;
+    border-bottom-color: #FF9A00;
 }
 
 #results #opposition,
 button#vote4 {
     background: #00e6ff;
-    border-bottom-color: darkred;
+    border-bottom-color: #00e6ff;
 }
 
 button#answer {
