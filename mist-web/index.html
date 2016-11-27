@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <title>Millennium</title>
+      <link rel="shortcut icon" href="icon.png" type="image/vnd.microsoft.icon" />
+      <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro" rel="stylesheet" />
+      <link rel='stylesheet' href='style.css' type='text/css' />
+      <script src="millennium.js"></script>
+      <script src="ui.js"></script>
+  </head>
+  <body>
+
+  <div class="content">
+
+    <h2 id="subtitle">Millennium</h2>
+
+    <h1 id="proposal">1. Question</h1>
+
+      <button id="vote1">A. AAA</button>
+      <button id="vote2">B. BBB</button>
+      <button id="vote3">C. CCC</button>
+      <button id="vote4">D. DDD</button>
+    
+    <button id="answer">Answer</button>
+
+    <div id="results">
+      <h3 id="support" class="results"></h3><h3 id="opposition" class="results"></h3>
+    </div>
+
+    <div id="message">
+      This Browser does not support Ethereum apps. <br> <a href="http://ethereum.org">Download Mist</a>
+    </div>
+
+    <div id="status"></div>
+
+  </div>
+
+  <div id="add-account">
+    Click here to add an account on Mist
+  </div>
+
+  <!-- <script src="https://raw.githubusercontent.com/ethereum/web3.js/0.16.0/dist/web3.min.js"></script> -->
+  <script type="text/javascript">
+
+   function autorun(){
+      init();
+   }
+   if (document.addEventListener) document.addEventListener("DOMContentLoaded", autorun, false);
+   else if (document.attachEvent) document.attachEvent("onreadystatechange", autorun);
+   else window.onload = autorun;
+  </script>
+  </body>
+</html>
