@@ -1,6 +1,5 @@
 
 function init() {
-
     setupEthereum();
     setupUi();
 }
@@ -21,12 +20,11 @@ function setupEthereum(){
         // If there is neither then this isn't an ethereum browser
         document.getElementById("results").style.display = "none";
         document.getElementById("see-results").style.display = "none";
-        document.getElementById("vote1").style.display = "none";
-        document.getElementById("vote2").style.display = "none";
-        document.getElementById("vote3").style.display = "none";
-        document.getElementById("vote4").style.display = "none";
         document.getElementById("subtitle").style.display = "none";
         document.getElementById("proposal").textContent = "Millennium";
+
+        showQuestion(false);
+        showChoices(false);
 
         var message = document.getElementById("message");
         message.style.display = "block";
@@ -35,10 +33,7 @@ function setupEthereum(){
 
     // If no accounts are present, show the floating baloon
     if (!web3.eth.accounts || web3.eth.accounts.length == 0) {
-        document.getElementById("vote1").style.display = "none";
-        document.getElementById("vote2").style.display = "none";
-        document.getElementById("vote3").style.display = "none";
-        document.getElementById("vote4").style.display = "none";
+        showChoices(false);
         document.getElementById("add-account").style.display = "block";
     }
 }
