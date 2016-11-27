@@ -28,14 +28,9 @@ contract MillionaireGame{
     mapping(uint => Question) questions;
     mapping(address => Player) public players;
 
-    uint feeAmount;
-    uint totalRewardAmount;
-
     function MillionaireGame() payable {
         owner = msg.sender;
-        feeAmount = 1;
-        totalRewardAmount = 0;
-        
+
         addQuestion(1, "Q-1?", "a, b, c, d, e", "a");
         addQuestion(2, "Q-2?", "a, b, c, d, e", "b");
         addQuestion(3, "Q-3?", "a, b, c, d, e", "c");
@@ -51,7 +46,6 @@ contract MillionaireGame{
             player.waitingNextQuestion = true;
         }
         if(player.waitingNextQuestion) {
-            totalRewardAmount += feeAmount;
             print_transfer(msg.sender, owner, msg.value);
             player.nextQuestion += 1;
             player.waitingNextQuestion = false;
@@ -98,7 +92,6 @@ contract MillionaireGame{
                 if(msg.sender.send(_value)){
                     print_result(msg.sender, player.correctCount, "You win!");
                     print_transfer(owner, msg.sender, _value);
-                    totalRewardAmount = 0;
                     newGame(msg.sender);
                 }
             }
