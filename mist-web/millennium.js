@@ -33,15 +33,14 @@ function init() {
         document.getElementById("add-account").style.display = "block";
     }
 
-
     setupUi();
 }
 
 var allowAnswer = false;
 
 var millionaireContractABI = [ { "constant": false, "inputs": [], "name": "nextQuestion", "outputs": [], "payable": true, "type": "function" }, { "constant": false, "inputs": [ { "name": "_answer", "type": "string" } ], "name": "answer", "outputs": [], "payable": false, "type": "function" }, { "inputs": [], "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "p", "type": "address" }, { "indexed": false, "name": "id", "type": "uint256" }, { "indexed": false, "name": "q", "type": "string" }, { "indexed": false, "name": "c", "type": "string" }, { "indexed": false, "name": "a", "type": "string" }, { "indexed": false, "name": "reward", "type": "uint256" } ], "name": "print_question", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "p", "type": "address" }, { "indexed": false, "name": "correctCount", "type": "uint256" }, { "indexed": false, "name": "msg", "type": "string" } ], "name": "print_result", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "print_transfer", "type": "event" } ];
-var millionaireContractAddress = '0x2563A373f4da44172b38D41a7F0BE89F17962e01';
-
+//var millionaireContractAddress = '0x2563A373f4da44172b38D41a7F0BE89F17962e01';
+var millionaireContractAddress = '0x71829240266681928426522D64f369d1D12Bc2d4';
 
 //event print_question(address p, uint id, string q, string c, string a, uint reward);
 function setupUi(){
