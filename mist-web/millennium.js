@@ -43,65 +43,94 @@ function init() {
     //answer();
 }
 
+var allowAnswer = false;
 
 var millionaireContractABI = [ { "constant": false, "inputs": [], "name": "nextQuestion", "outputs": [], "payable": true, "type": "function" }, { "constant": false, "inputs": [ { "name": "_answer", "type": "string" } ], "name": "answer", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "players", "outputs": [ { "name": "newShare", "type": "bool", "value": false }, { "name": "nextQuestion", "type": "uint256", "value": "0" }, { "name": "waitingNextQuestion", "type": "bool", "value": false }, { "name": "correctCount", "type": "uint256", "value": "0" } ], "payable": false, "type": "function" }, { "inputs": [], "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "p", "type": "address" }, { "indexed": false, "name": "id", "type": "uint256" }, { "indexed": false, "name": "q", "type": "string" }, { "indexed": false, "name": "c", "type": "string" }, { "indexed": false, "name": "a", "type": "string" }, { "indexed": false, "name": "reward", "type": "uint256" } ], "name": "print_question", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "p", "type": "address" }, { "indexed": false, "name": "correctCount", "type": "uint256" }, { "indexed": false, "name": "msg", "type": "string" } ], "name": "print_result", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "print_transfer", "type": "event" } ];
 var millionaireContractAddress = '0xe54985ce432620000F95A0F84F6CD945eA74811b';
 
 
 //event print_question(address p, uint id, string q, string c, string a, uint reward);
+function setupUi(){
+
+    document.getElementById('answer').addEventListener('click', function(){ nextQuestion(); }, false);
+    document.getElementById('vote1').addEventListener('click', function(){ answer('a'); }, false);
+    document.getElementById('vote2').addEventListener('click', function(){ answer('b'); }, false);
+    document.getElementById('vote3').addEventListener('click', function(){ answer('c'); }, false);
+    document.getElementById('vote4').addEventListener('click', function(){ answer('d'); }, false);
+}
+
+var millionaireContract = web3.eth.contract(millionaireContractABI);
+var millionaireContractFunction = millionaireContract.at(millionaireContractAddress);
 
 function nextQuestion() {
 
     console.log('nextQuestion', web3.eth.accounts.length);
 
     web3.eth.defaultAccount = web3.eth.accounts[0];
-
-    var millionaireContract = web3.eth.contract(millionaireContractABI);
-    var millionaireContractFunction = millionaireContract.at(millionaireContractAddress);
+    millionaireContract = web3.eth.contract(millionaireContractABI);
+    millionaireContractFunction = millionaireContract.at(millionaireContractAddress);
 
     var printQuestionLog = millionaireContractFunction.print_question();
     printQuestionLog.watch(function(error, result){
         //document.getElementById('status').textContent = result.args.s;
         console.log('event', result.args);
 
-
         var question = result.args.q;
         var choices = result.args.c.split(',');
-
-        //var reward = web3.fromWei(result.args.reward, 'ether')
 
         var reward = web3.fromWei(web3.eth.getBalance(millionaireContractAddress),'ether').toString(10);
         console.log('reward', reward);
 
-        document.getElementById('proposal').textContent = (question + '(Reward = '+reward+' ether)');
+        document.getElementById('subtitle').textContent = '(Reward = ' + reward + ' ether)';
+        document.getElementById('proposal').textContent = question;
         document.getElementById('vote1').textContent = choices[0];
         document.getElementById('vote2').textContent = choices[1];
         document.getElementById('vote3').textContent = choices[2];
         document.getElementById('vote4').textContent = choices[3];
 
         document.getElementById('proposal').textContent = question;
+        document.getElementById('answer').textContent = 'Next';
 
+        showLoading(false);
+
+        allowAnswer = true;
     })
 
+    showLoading(true);
+
     var result = millionaireContractFunction.nextQuestion();
-    console.log('next question result', result);
-
-
-    // Check if thsere are accounts available
-    /*if (web3.eth.accounts && web3.eth.accounts.length > 0) {
-
-        document.getElementById('status').textContent = 'Has account';
-
-    } else {
-        console.log('callbacks', mist.callbacks);
-        mist.requestAccount(function(e, account) {
-            document.getElementById('status').textContent = 'Get Account';
-        });
-    }*/
+    console.log('next question api call', result);
 }
 
-function answer() {
+function answer(choice) {
 
+    if(!allowAnswer){
+        console.log('not allow to answer');
+        return;
+    }
+
+    allowAnswer = false;
+
+    var printResultLog = millionaireContractFunction.print_result();
+    printResultLog.watch(function(error, result){
+
+        console.log('event print result', result.args);
+
+        showLoading(false);
+        document.getElementById('status').textContent = result.args.msg;
+    })
+
+    showLoading(true);
+    var result = millionaireContractFunction.answer(choice);
+    console.log('answer api call', result);
+}
+
+function showLoading(show){
+    if(show){
+        document.getElementById('loading').style.display = 'block';
+    }else{
+        document.getElementById('loading').style.display = 'none';
+    }
 }
 
 //var greetingContractABI = [ { "constant": false, "inputs": [ { "name": "msg", "type": "string" } ], "name": "greeting", "outputs": [ { "name": "", "type": "string" } ], "payable": false, "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "s", "type": "string" } ], "name": "print_log", "type": "event" } ];

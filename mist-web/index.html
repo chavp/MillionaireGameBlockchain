@@ -14,7 +14,7 @@
 
   <div class="content">
 
-    <h2 id="subtitle">Millennium</h2>
+    <h2 id="subtitle">Millennium Click to Start</h2>
 
     <h1 id="proposal">1. Question</h1>
 
@@ -23,7 +23,7 @@
       <button id="vote3">C. CCC</button>
       <button id="vote4">D. DDD</button>
     
-    <button id="answer">Answer</button>
+    <button id="answer">Start</button>
 
     <div id="results">
       <h3 id="support" class="results"></h3><h3 id="opposition" class="results"></h3>
@@ -34,6 +34,10 @@
     </div>
 
     <div id="status"></div>
+
+      <div id="loading" style="display:none; width: 100%; height: 100%;background-color: #333333;opacity: 0.8;text-align: center; vertical-align: middle; padding-top: 200px; font-size: 33px; position: absolute; color: #FFFFFF; top:0px; left: 0px">
+          WAITING.....
+      </div>
 
   </div>
 
@@ -51,5 +55,8 @@
    else if (document.attachEvent) document.attachEvent("onreadystatechange", autorun);
    else window.onload = autorun;
   </script>
+
+
+
   </body>
 </html>
