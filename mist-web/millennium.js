@@ -68,6 +68,25 @@ function showQuestion(show){
     document.getElementById('vote4').style.visibility = visibility;
 }
 
+function showChoices(show){
+    var visibility = 'hidden';
+    if(show){
+        visibility = 'visible';
+    }
+    document.getElementById('vote1').style.visibility = visibility;
+    document.getElementById('vote2').style.visibility = visibility;
+    document.getElementById('vote3').style.visibility = visibility;
+    document.getElementById('vote4').style.visibility = visibility;
+}
+
+function showNext(show){
+    var visibility = 'hidden';
+    if(show){
+        visibility = 'visible';
+    }
+    document.getElementById('answer').style.visibility = visibility;
+}
+
 var millionaireContract = web3.eth.contract(millionaireContractABI);
 var millionaireContractFunction = millionaireContract.at(millionaireContractAddress);
 
@@ -111,7 +130,9 @@ function nextQuestion() {
         document.getElementById('status').textContent = '';
 
         showQuestion(true);
+        showChoices(true);
         showLoading(false);
+        showNext(false);
 
         allowAnswer = true;
     })
@@ -144,13 +165,22 @@ function answer(choice) {
 
         showLoading(false);
         document.getElementById('status').textContent = result.args.msg;
+        document.getElementById('proposal').textContent = result.args.msg;
 
+        showChoices(false);
+        showNext(true);
         if(result.args.msg == 'Wrong answer.'){
-            document.getElementById('status').textContent = 'Wrong answer!, Click Restart to Begin';
+            document.getElementById('status').textContent = 'Wrong answer! Click Restart to Begin';
+            document.getElementById('proposal').textContent = 'Wrong answer! Click Restart to Begin';
             document.getElementById('answer').textContent = 'Restart';
         }else if(result.args.msg == 'Correct answer. Please next question.'){
-            document.getElementById('status').textContent = 'Correct answer!, Click Next to Continue';
+            document.getElementById('status').textContent = 'Correct answer! Click Next to Continue';
+            document.getElementById('proposal').textContent = 'Correct answer! Click Next to Continue';
             document.getElementById('answer').textContent = 'Next';
+        }else if(result.args.msg == 'You win!'){
+            document.getElementById('status').textContent = 'You Win! Click Start to Play Again';
+            document.getElementById('proposal').textContent = 'You Win! Click Start to Play Again';
+            document.getElementById('answer').textContent = 'Start';
         }
     })
 
