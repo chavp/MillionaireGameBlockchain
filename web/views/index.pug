@@ -1,0 +1,9 @@
+html
+  head
+    title= title
+  body
+    h1 Game Reword #{reward} ether
+    h3= message
+    ul
+      for acc in accounts
+        li #{acc.acc_id} | #{acc.balance} ether 
