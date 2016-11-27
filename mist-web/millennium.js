@@ -70,11 +70,19 @@ function nextQuestion() {
     millionaireContract = web3.eth.contract(millionaireContractABI);
     millionaireContractFunction = millionaireContract.at(millionaireContractAddress);
 
-    var printQuestionLog = millionaireContractFunction.print_question();
+    console.log('sender', web3.eth.defaultAccount);
+
+    var printQuestionLog = millionaireContractFunction.print_question({address:web3.eth.defaultAccount});
 
     printQuestionLog.watch(function(error, result){
+
         //document.getElementById('status').textContent = result.args.s;
-        console.log('event', result.args);
+        console.log('event next question', result.args);
+
+        if(result.args.p != web3.eth.defaultAccount){
+            console.log('not a user who call next question');
+            return;
+        }
 
         var question = result.args.q;
         var choices = result.args.c.split(';');
@@ -99,7 +107,8 @@ function nextQuestion() {
 
     showLoading(true);
 
-    var result = millionaireContractFunction.nextQuestion({value: web3.toWei(1, "ether")});
+    //var result = millionaireContractFunction.nextQuestion({value: web3.toWei(1, "ether")});
+    var result = millionaireContractFunction.nextQuestion();
     console.log('next question api call', result);
 }
 
@@ -116,6 +125,11 @@ function answer(choice) {
     printResultLog.watch(function(error, result){
 
         console.log('event print result', result.args);
+
+        if(result.args.p != web3.eth.defaultAccount){
+            console.log('not a user who call answer');
+            return;
+        }
 
         showLoading(false);
         document.getElementById('status').textContent = result.args.msg;
