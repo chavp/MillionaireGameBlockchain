@@ -1,14 +1,14 @@
 pragma solidity ^0.4.2;
 
 contract MillionaireGame{
-    
+
     struct Player{
         bool newShare;
         uint nextQuestion;
         bool waitingNextQuestion;
         uint correctCount;
     }
-    
+
     struct Question
     {
         uint id;
@@ -16,26 +16,25 @@ contract MillionaireGame{
         string choices;
         string answer;
     }
-    
+
     event print_question(address p, uint id, string q, string c, string a, uint reward);
     event print_result(address p, uint correctCount, string msg);
-    
     event print_transfer(address indexed from, address indexed to, uint256 value);
-    
+
     address owner;
 
     uint questionsCount;
     mapping(uint => Question) questions;
-    mapping(address => Player) public players;
+    mapping(address => Player) players;
 
     function MillionaireGame() payable {
         owner = msg.sender;
 
-        addQuestion(1, "Q-1?", "a, b, c, d, e", "a");
-        addQuestion(2, "Q-2?", "a, b, c, d, e", "b");
-        addQuestion(3, "Q-3?", "a, b, c, d, e", "c");
-        addQuestion(4, "Q-4?", "a, b, c, d, e", "d");
-        addQuestion(5, "Q-5?", "a, b, c, d, e", "e");
+        addQuestion(1, "1. What is the name of javascript library to interact with Ethereum?", "a. web1; b. web2; c. web3; d. web4", "c");
+        addQuestion(2, "2. What is the value which is equal to 1 Ether?", "a. 1,000 wei; b. 1,000 szabo; c. 1,000 finney; d. 1,000 Ether", "c");
+        addQuestion(3, "3. What is the flag that makes geth listen on port 8545?", "a. --listen; b. --rpc; c. --8545; d. --geth", "b");
+        addQuestion(4, "4. What is the programming language used to write smart contract in Ethereum?", "a. Solid Snake; b. Liquid Snake; c. Solidus; d. Solidity", "d");
+        addQuestion(5, "5. What are miners looking for in Ethereum", "a. BitCoin; b. Ether; c. Gold; d. Diamond", "b");
     }
 
     function nextQuestion() payable {
@@ -52,23 +51,23 @@ contract MillionaireGame{
             if( player.nextQuestion <= questionsCount){
                 print_question(
                     msg.sender,
-                    questions[player.nextQuestion].id, 
-                    questions[player.nextQuestion].question, 
-                    questions[player.nextQuestion].choices, 
+                    questions[player.nextQuestion].id,
+                    questions[player.nextQuestion].question,
+                    questions[player.nextQuestion].choices,
                     "Please answer?",
                     this.balance);
             }
         } else {
             print_question(
                     msg.sender,
-                    questions[player.nextQuestion].id, 
-                    questions[player.nextQuestion].question, 
-                    questions[player.nextQuestion].choices, 
+                    questions[player.nextQuestion].id,
+                    questions[player.nextQuestion].question,
+                    questions[player.nextQuestion].choices,
                     "Please answer?",
                     this.balance);
         }
     }
-    
+
     function answer(string _answer) {
         Player player = players[msg.sender];
         if(!player.newShare){
@@ -86,7 +85,7 @@ contract MillionaireGame{
                 print_result(msg.sender, player.correctCount, "Wrong answer.");
                 newGame(msg.sender);
             }
-            
+
             if(player.correctCount == questionsCount){
                 uint _value = this.balance;
                 if(msg.sender.send(_value)){
@@ -97,20 +96,20 @@ contract MillionaireGame{
             }
         }
     }
-    
+
     function query() internal {
         for (uint i = 1; i <= questionsCount; i++) {
             print_question(msg.sender, questions[i].id, questions[i].question, questions[i].choices, "Question info.",
                     this.balance);
         }
     }
-    
+
     function newGame(address _sender) internal {
         players[_sender].nextQuestion = 0;
         players[_sender].correctCount = 0;
         players[_sender].waitingNextQuestion = true;
     }
-    
+
     function addQuestion(uint _id, string _question, string _choices, string _answer) internal {
         questions[_id].id = _id;
         questions[_id].question = _question;
@@ -118,7 +117,7 @@ contract MillionaireGame{
         questions[_id].answer = _answer;
         ++questionsCount;
     }
-    
+
     function stringsEqual(string storage _a, string memory _b) internal returns (bool) {
         bytes storage a = bytes(_a);
         bytes memory b = bytes(_b);
