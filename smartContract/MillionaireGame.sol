@@ -20,13 +20,13 @@ contract MillionaireGame{
     event print_question(address p, uint id, string q, string c, string a, uint reward);
     event print_result(address p, uint correctCount, string msg);
     
-    event Transfer(address indexed from, address indexed to, uint256 value);
+    event print_transfer(address indexed from, address indexed to, uint256 value);
     
     address owner;
 
     uint questionsCount;
     mapping(uint => Question) questions;
-    mapping(address => Player) players;
+    mapping(address => Player) public players;
 
     uint feeAmount;
     uint totalRewardAmount;
@@ -35,6 +35,7 @@ contract MillionaireGame{
         owner = msg.sender;
         feeAmount = 1;
         totalRewardAmount = 0;
+        
         addQuestion(1, "Q-1?", "a, b, c, d, e", "a");
         addQuestion(2, "Q-2?", "a, b, c, d, e", "b");
         addQuestion(3, "Q-3?", "a, b, c, d, e", "c");
@@ -51,7 +52,7 @@ contract MillionaireGame{
         }
         if(player.waitingNextQuestion) {
             totalRewardAmount += feeAmount;
-            Transfer(msg.sender, owner, msg.value);
+            print_transfer(msg.sender, owner, msg.value);
             player.nextQuestion += 1;
             player.waitingNextQuestion = false;
             if( player.nextQuestion <= questionsCount){
@@ -60,7 +61,7 @@ contract MillionaireGame{
                     questions[player.nextQuestion].id, 
                     questions[player.nextQuestion].question, 
                     questions[player.nextQuestion].choices, 
-                    "Please answer?.",
+                    "Please answer?",
                     this.balance);
             }
         } else {
@@ -69,7 +70,7 @@ contract MillionaireGame{
                     questions[player.nextQuestion].id, 
                     questions[player.nextQuestion].question, 
                     questions[player.nextQuestion].choices, 
-                    "Please answer?.",
+                    "Please answer?",
                     this.balance);
         }
     }
@@ -96,7 +97,7 @@ contract MillionaireGame{
                 uint _value = this.balance;
                 if(msg.sender.send(_value)){
                     print_result(msg.sender, player.correctCount, "You win!");
-                    Transfer(owner, msg.sender, _value);
+                    print_transfer(owner, msg.sender, _value);
                     totalRewardAmount = 0;
                     newGame(msg.sender);
                 }
@@ -126,14 +127,14 @@ contract MillionaireGame{
     }
     
     function stringsEqual(string storage _a, string memory _b) internal returns (bool) {
-		bytes storage a = bytes(_a);
-		bytes memory b = bytes(_b);
-		if (a.length != b.length)
-			return false;
-		// @todo unroll this loop
-		for (uint i = 0; i < a.length; i ++)
-			if (a[i] != b[i])
-				return false;
-		return true;
-	}
+        bytes storage a = bytes(_a);
+        bytes memory b = bytes(_b);
+        if (a.length != b.length)
+            return false;
+        // @todo unroll this loop
+        for (uint i = 0; i < a.length; i ++)
+            if (a[i] != b[i])
+                return false;
+        return true;
+    }
 }
